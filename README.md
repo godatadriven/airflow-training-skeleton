@@ -9,8 +9,8 @@ Training participants generally like taking their code home after the training, 
 ## Setup CI instructions
 
 1. Fork the repository.
-2. In the `cloudbuild.yaml`, fill in your GCP PROJECT ID and CLOUD COMPOSER BUCKET
-3. In your GCP project, browse to Cloud Build.
+2. In the `cloudbuild.yaml`, fill in your [GCP PROJECT ID] and [CLOUD COMPOSER BUCKET]. Since these are different for each project, unfortunately we cannot fill these automatically. You can check them in the UI.
+3. In the GCP console, go to your GCP project, and browse to Cloud Build.
 4. Go to Build triggers.
 5. Click Add trigger.
 6. Select source GitHub and click Continue.
