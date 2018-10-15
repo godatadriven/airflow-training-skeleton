@@ -1,1 +1,1 @@
-airflow-training-operator
+airflow-training-operators
