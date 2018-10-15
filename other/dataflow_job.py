@@ -40,7 +40,22 @@ def run(argv=None):
                 "result_table",
                 dataset="result_dataset",
                 project="gdd-airflow-training",
-                schema="city:string, county:string, district:string, duration:string, locality:string, newly_built:boolean, paon:string, postcode:string, ppd_category_type:string, price:numeric, property_type:string, record_status:string, saon:string, street:string, transaction:string, transfer_date:numeric",
+                schema="city:string, "
+                       "county:string, "
+                       "district:string, "
+                       "duration:string, "
+                       "locality:string, "
+                       "newly_built:boolean, "
+                       "paon:string, "
+                       "postcode:string, "
+                       "ppd_category_type:string, "
+                       "price:numeric, "
+                       "property_type:string, "
+                       "record_status:string, "
+                       "saon:string, "
+                       "street:string, "
+                       "transaction:string, "
+                       "transfer_date:numeric",
                 create_disposition=BigQueryDisposition.CREATE_IF_NEEDED,
             )
         )
