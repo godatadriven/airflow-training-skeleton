@@ -4,7 +4,7 @@ steps:
   args: ['bash', '-c', 'pip install -r requirements_dev.txt && flake8']
 - id: 'update-python-dependencies'
   name: 'gcr.io/cloud-builders/gcloud'
-  args: ['-c', 'gcloud composer environments update << INSERT GCP PROJECT ID >> --update-pypi-packages-from-file requirements.txt --location europe-west1 --async || true']
+  args: ['-c', 'gcloud composer environments update training-airflow --update-pypi-packages-from-file requirements.txt --location europe-west1 --async || true']
   entrypoint: 'bash'
 - id: 'upload'
   name: 'gcr.io/cloud-builders/gsutil'
