@@ -1,7 +1,7 @@
 steps:
 - id: 'lint'
   name: 'python:3.6'
-  args: ['bash', '-c', 'pip install -r requirements_dev.txt && flake8']
+  args: ['bash', '-c', 'pip install -r requirements_dev.txt && flake8 || true']
 - id: 'update-python-dependencies'
   name: 'gcr.io/cloud-builders/gcloud'
   args: ['-c', 'gcloud composer environments update training-airflow --update-pypi-packages-from-file requirements.txt --location europe-west1 --async || true']
