@@ -1,1 +1,1 @@
-airflow-training-operators
+apache-airflow==1.10.0

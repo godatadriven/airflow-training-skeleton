@@ -11,7 +11,7 @@ Training participants generally like taking their code home after the training, 
 A CI pipeline is included with the project (`cloudbuild.yml`), which defines steps to execute after each push. However, there are variables which must be entered before applying the CI pipeline. The CI pipeline tests and deploys your code to Google Cloud Composer.
 
 1. Fork the repository.
-2. In the `cloudbuild.yaml`, fill in your `GCP PROJECT ID` and `CLOUD COMPOSER BUCKET`. Since these are different for each project, unfortunately we cannot fill these automatically. You can check them in the UI.
+2. In the `cloudbuild.yaml`, fill in your `CLOUD COMPOSER BUCKET`. Since these are different for each project, unfortunately we cannot fill these automatically. You can check them in the Composer UI.
 3. In the GCP console, go to your GCP project, and browse to Cloud Build.
 4. Go to Build triggers.
 5. Click Add trigger.
