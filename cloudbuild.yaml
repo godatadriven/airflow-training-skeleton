@@ -1,3 +1,5 @@
+# Ensure Cloud Build service account has gcloud.composer.environments.describe permission
+
 steps:
 - id: 'lint'
   name: 'python:3.6'
@@ -7,5 +9,10 @@ steps:
   args: ['-c', 'grep -v apache-airflow requirements.txt > gcp_requirements.txt && gcloud composer environments update training-airflow --update-pypi-packages-from-file gcp_requirements.txt --location europe-west1 --async || true']
   entrypoint: 'bash'
 - id: 'upload'
-  name: 'gcr.io/cloud-builders/gsutil'
-  args: ['-m', 'rsync', '-r', '.', 'gs://<< INSERT CLOUD COMPOSER BUCKET >>/']
+  name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'sh'
+  args:
+    - '-c'
+    - |
+      composer_bucket=$(gcloud composer environments describe airflow-training --location europe-west1 --format='value(config.dagGcsPrefix)')
+      gsutil -m rsync -r . $composer_bucket
