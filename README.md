@@ -14,7 +14,7 @@ A CI pipeline is included with the project (`cloudbuild.yml`), which defines ste
 2. In the `cloudbuild.yaml`, fill in your `CLOUD COMPOSER BUCKET`. Since these are different for each project, unfortunately we cannot fill these automatically. You can check them in the Composer UI.
 3. In the GCP console, go to your GCP project, and browse to Cloud Build.
 4. Go to Build triggers.
-5. Click Add trigger.
+5. Click "Create trigger".
 6. Select source GitHub and click Continue.
 7. You have to allow Google Cloud Platform to access your repositories.
 8. In Cloud Build, you can now select your repositories. Select this forked repository and check the consent box.
