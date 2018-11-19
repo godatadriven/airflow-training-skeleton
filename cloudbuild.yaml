@@ -1,5 +1,3 @@
-# Ensure Cloud Build service account has gcloud.composer.environments.describe permission
-
 steps:
 - id: 'lint'
   name: 'python:3.6'
