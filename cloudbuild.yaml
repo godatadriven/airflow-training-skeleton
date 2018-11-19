@@ -3,12 +3,12 @@
 steps:
 - id: 'lint'
   name: 'python:3.6'
-  args: ['bash', '-c', 'pip install -r requirements_dev.txt && flake8 || true']
+  args: ['bash', '-c', 'pip install flake8 && flake8 || true']
 - id: 'update-python-dependencies'
   name: 'gcr.io/cloud-builders/gcloud'
   args: ['-c', 'grep -v apache-airflow requirements.txt > gcp_requirements.txt && gcloud composer environments update training-airflow --update-pypi-packages-from-file gcp_requirements.txt --location europe-west1 --async || true']
   entrypoint: 'bash'
-- id: 'upload'
+- id: 'sync-dags'
   name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'sh'
   args:
