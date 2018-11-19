@@ -6,7 +6,7 @@ steps:
   args: ['bash', '-c', 'pip install -r requirements_dev.txt && flake8 || true']
 - id: 'update-python-dependencies'
   name: 'gcr.io/cloud-builders/gcloud'
-  args: ['-c', 'grep -v apache-airflow requirements.txt > gcp_requirements.txt && gcloud composer environments update training-airflow2 --update-pypi-packages-from-file gcp_requirements.txt --location europe-west1 --async || true']
+  args: ['-c', 'grep -v apache-airflow requirements.txt > gcp_requirements.txt && gcloud composer environments update training-airflow --update-pypi-packages-from-file gcp_requirements.txt --location europe-west1 --async || true']
   entrypoint: 'bash'
 - id: 'upload'
   name: 'gcr.io/cloud-builders/gcloud'
@@ -14,5 +14,5 @@ steps:
   args:
     - '-c'
     - |
-      composer_bucket=$(gcloud composer environments describe training-airflow2 --location europe-west1 --format='value(config.dagGcsPrefix)')
+      composer_bucket=$(gcloud composer environments describe training-airflow --location europe-west1 --format='value(config.dagGcsPrefix)')
       gsutil -m rsync -r . $composer_bucket
