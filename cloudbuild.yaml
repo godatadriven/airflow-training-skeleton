@@ -15,4 +15,4 @@ steps:
     - '-c'
     - |
       composer_bucket=$(gcloud composer environments describe training-airflow --location europe-west1 --format='value(config.dagGcsPrefix)')
-      gsutil -m rsync -r . $composer_bucket
+      gsutil -m rsync -r dags $composer_bucket
