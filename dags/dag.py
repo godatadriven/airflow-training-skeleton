@@ -3,7 +3,7 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 
 dag = DAG(
-    dag_id="exercise1",
+    dag_id="hello_airflow",
     default_args={
         "owner": "godatadriven",
         "start_date": airflow.utils.dates.days_ago(3),
