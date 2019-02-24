@@ -7,13 +7,13 @@ from airflow.operators.python_operator import PythonOperator
 args = {"owner": "godatadriven", "start_date": airflow.utils.dates.days_ago(14)}
 
 dag = DAG(
-    dag_id=”exercise2",
+    dag_id="exercise2",
     default_args=args,
     description="Sample DAG showing some Airflow Operators."
-)​
+)
 
 def _print_exec_date(execution_date, **context):
-    print(execution_date)​
+    print(execution_date)
 
 print_date = PythonOperator(
     task_id="print_execution_date",
@@ -25,7 +25,7 @@ print_date = PythonOperator(
 end = DummyOperator(task_id="the_end", dag=dag)
 
 wait_tasks = [
-    BashOperator(task_id=f"wait_{w}", bash_command=f"sleep {w}", dag=dag)
+    BashOperator(task_id="wait_" + str(w), bash_command="sleep " + str(w), dag=dag)
     for w in [1, 5, 10]
 ]
 
