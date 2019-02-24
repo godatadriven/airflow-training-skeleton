@@ -3,7 +3,6 @@ from airflow.models import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import BranchPythonOperator, PythonOperator
-from airflow.utils.trigger_rule import TriggerRule
 
 args = {"owner": "godatadriven", "start_date": airflow.utils.dates.days_ago(14)}
 
@@ -20,7 +19,7 @@ def print_weekday(execution_date, **context):
 
 
 print_weekday = PythonOperator(
-    task_id="print_weekday",
+    task_id="print_weekday_boom",
     python_callable=print_weekday,
     provide_context=True,
     dag=dag,
@@ -57,7 +56,6 @@ print_weekday >> branching
 
 final_task = BashOperator(
     task_id="final_task",
-    trigger_rule=TriggerRule.ONE_SUCCESS,
     bash_command="sleep 5",
     dag=dag
 )
