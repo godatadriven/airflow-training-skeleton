@@ -12,6 +12,7 @@ steps:
   args:
     - '-c'
     - |
+      gcloud composer environments describe --location europe-west1
       composer_bucket=$(gcloud composer environments describe training-airflow --location europe-west1 --format='value(config.dagGcsPrefix)')
       gsutil -m rsync -r dags $composer_bucket
       bucket_root=$(echo $composer_bucket | sed 's/\/dags//g')
