@@ -7,7 +7,7 @@ from airflow.operators.python_operator import BranchPythonOperator, PythonOperat
 args = {"owner": "godatadriven", "start_date": airflow.utils.dates.days_ago(14)}
 
 dag = DAG(
-    dag_id="exercise3",
+    dag_id="exercise3_boom",
     default_args=args,
     description="Demo DAG showing BranchPythonOperator.",
     schedule_interval="0 0 * * *",
