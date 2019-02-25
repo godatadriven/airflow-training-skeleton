@@ -55,7 +55,7 @@ for currency in {"EUR", "USD"}:
                  + currency,
         http_conn_id="airflow-training-currency-http",
         gcs_path="currency/{{ ds }}-" + currency + ".json",
-        gcs_bucket="airflow-training-data",
+        gcs_bucket="fokkos-bucket",
         dag=dag,
     ) >> dataproc_create_cluster
 
