@@ -15,6 +15,10 @@ from http_to_gcs_operator import HttpToGcsOperator
 PROJECT_ID = "airflowbolcom-020ce46afe7b0fe0"
 BUCKET = "fokkos-bucket"
 
+
+import os
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
 args = {
     "owner": "airflow",
     "start_date": airflow.utils.dates.days_ago(14)
@@ -61,7 +65,7 @@ for currency in {"EUR", "USD"}:
 
 compute_aggregates = DataProcPySparkOperator(
     task_id="compute_aggregates",
-    main="build_statistics.py",
+    main=dir_path + "build_statistics.py",
     cluster_name="analyse-pricing-{{ ds }}",
     arguments=["{{ ds }}"],
     dag=dag,
