@@ -11,7 +11,7 @@ args = {
 }
 
 dag = DAG(
-    dag_id='example_branch_operator',
+    dag_id='example_branch_operator_airflow',
     default_args=args,
     schedule_interval="@daily",
 )
