@@ -29,15 +29,15 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.models import Variable
 
 
-def send_to_slack_func(**context):
-    ...
-
-
-send_to_slack = PythonOperator(
-    task_id='send_to_slack',
-    python_callable=send_to_slack_func,
-    provide_context=True,
-    dag=dag,
-)
-
-bq_fetch_data >> send_to_slack
+# def send_to_slack_func(**context):
+#     ...
+#
+#
+# send_to_slack = PythonOperator(
+#     task_id='send_to_slack',
+#     python_callable=send_to_slack_func,
+#     provide_context=True,
+#     dag=dag,
+# )
+#
+# bq_fetch_data >> send_to_slack
