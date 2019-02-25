@@ -3,13 +3,14 @@ import sys
 from pyspark.sql.functions import col
 from pyspark.sql import SparkSession
 
-dt = sys.argv[1]
-print(dt)
+input_properties = sys.argv[1]
+input_currencies = sys.argv[2]
+target_path = sys.argv[3]
 
 spark = SparkSession.builder.getOrCreate()
 
 spark.read.json(
-    "gs://airflow-training-data/land_registry_price_paid_uk/*/*.json"
+    input_properties
 ).withColumn(
     "transfer_date", col("transfer_date").cast("timestamp").cast("date")
 ).createOrReplaceTempView(
@@ -35,7 +36,7 @@ spark.read.json(
 #  |-- transaction: string (nullable = true)
 #  |-- transfer_date: double (nullable = true)
 
-spark.read.json("gs://airflow-training-data/currency/*.json").withColumn(
+spark.read.json(input_currencies).withColumn(
     "date", col("date").cast("date")
 ).createOrReplaceTempView("currencies")
 
@@ -75,13 +76,10 @@ aggregation = spark.sql(
         district,
         city,
         currency
-""".format(
-        dt
-    )
-)
+""")
 
 (
     aggregation.write.mode("overwrite")
-    .partitionBy("transfer_date")
-    .parquet("gs://airflow-training-data/average_prices/")
+        .partitionBy("transfer_date")
+        .parquet(target_path)
 )
