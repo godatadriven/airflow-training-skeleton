@@ -1,7 +1,6 @@
 import airflow
 
 from airflow import DAG
-from datetime import datetime
 from airflow.utils.dates import days_ago
 
 dag = DAG(
@@ -20,16 +19,13 @@ bq_fetch_data = BigQueryGetDataOperator(
     sql="""
     SELECT committer.name, count(1) as cnt
     FROM [bigquery-public-data.github_repos.commits]
-    WHERE DATE(committer.date) = '{{ dt }}'
+    WHERE DATE(committer.date) = '{{ ds }}'
     AND repo_name LIKE '%airflow%'
     GROUP BY committer.name
     LIMIT 5;
 """,
     dag=dag
 )
-
-from airflow.operators.python_operator import PythonOperator
-from airflow.models import Variable
 
 # def send_to_slack_func(**context):
 #     ...
