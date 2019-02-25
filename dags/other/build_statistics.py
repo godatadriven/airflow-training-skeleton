@@ -3,6 +3,8 @@ import sys
 from pyspark.sql.functions import col
 from pyspark.sql import SparkSession
 
+print(sys.argv)
+
 input_properties = sys.argv[1]
 input_currencies = sys.argv[2]
 target_path = sys.argv[3]
