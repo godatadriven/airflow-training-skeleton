@@ -88,7 +88,7 @@ compute_aggregates >> GoogleCloudStorageToBigQueryOperator(
     task_id="write_to_bq",
     bucket=BUCKET,
     source_objects=["average_prices/transfer_date={{ ds }}/*.parquet"],
-    destination_project_dataset_table=PROJECT_ID + ":fokko.land_registry_price",
+    destination_project_dataset_table=PROJECT_ID + ":fokko.land_registry_price${{ ds_nodash }}",
     source_format="PARQUET",
     write_disposition="WRITE_TRUNCATE",
     dag=dag,
@@ -103,7 +103,7 @@ land_registry_prices_to_bigquery = DataFlowPythonOperator(
         "temp_location": "gs://{}/dataflow-staging".format(BUCKET),
         "input": "gs://fokkos-bucket/land_registry_price_paid_uk/{{ ds }}/*.json",
         "dataset": "fokko",
-        "table": "raw_prices${{ ds_nodash }}",
+        "table": "raw_prices",
         "runner": "DataflowRunner",
         "job_name": "import-raw-data-{{ ds }}"
     },
