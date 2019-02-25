@@ -99,6 +99,7 @@ land_registry_prices_to_bigquery = DataFlowPythonOperator(
     task_id="land_registry_prices_to_bigquery",
     dataflow_default_options={
         "project_id": PROJECT_ID,
+        "project": PROJECT_ID,
         "region": "europe-west1",
         "staging_location": "gs://{}/dataflow-staging".format(BUCKET),
         "temp_location": "gs://{}/dataflow-staging".format(BUCKET),

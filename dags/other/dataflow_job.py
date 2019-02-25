@@ -61,8 +61,7 @@ def run(argv=None):
                    "street:string, "
                    "transaction:string, "
                    "transfer_date:numeric",
-            create_disposition=BigQueryDisposition.CREATE_IF_NEEDED,
-        )
+            create_disposition=BigQueryDisposition.CREATE_IF_NEEDED)
         )
 
 
