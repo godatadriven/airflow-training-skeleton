@@ -12,8 +12,10 @@ dag = DAG(
     description="Sample DAG showing some Airflow Operators."
 )
 
+
 def _print_exec_date(execution_date, **context):
     print(execution_date)
+
 
 print_date = PythonOperator(
     task_id="print_execution_date",
