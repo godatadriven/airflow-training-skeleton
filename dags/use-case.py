@@ -63,7 +63,7 @@ for currency in {"EUR", "USD"}:
 
 compute_aggregates = DataProcPySparkOperator(
     task_id="compute_aggregates",
-    main="gs://europe-west1-training-airfl-52127ea6-bucket/other/build_statistics.py",
+    main="gs://europe-west1-training-airfl-52127ea6-bucket/dags/other/build_statistics.py",
     cluster_name="analyse-pricing-{{ ds }}",
     arguments=["{{ ds }}"],
     dag=dag,
@@ -100,7 +100,7 @@ load_into_bigquery = DataFlowPythonOperator(
         "runner": "DataflowRunner",
         "job_name": "import-raw-data-{{ ds }}"
     },
-    py_file="gs://europe-west1-training-airfl-52127ea6-bucket/other/dataflow_job.py",
+    py_file="gs://europe-west1-training-airfl-52127ea6-bucket/dags/other/dataflow_job.py",
     dag=dag,
 )
 
