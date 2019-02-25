@@ -97,7 +97,7 @@ load_into_bigquery = DataFlowPythonOperator(
         "project": "gdd-airflow-training",
         "region": "europe-west1",
     },
-    py_file="gs://europe-west1-airflow-traini-627000e4-bucket/other/dataflow_job.py",
+    py_file="gs://europe-west1-training-airfl-52127ea6-bucket/other/dataflow_job.py",
     dag=dag,
 )
 
