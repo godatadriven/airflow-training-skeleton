@@ -68,7 +68,7 @@ compute_aggregates = DataProcPySparkOperator(
     main="gs://europe-west1-training-airfl-52127ea6-bucket/dags/other/build_statistics.py",
     cluster_name="analyse-pricing-{{ ds }}",
     arguments=[
-        "gs://fokkos-bucket/land_registry_price_paid_uk/{{ ds }}/*.json"
+        "gs://fokkos-bucket/land_registry_price_paid_uk/{{ ds }}/*.json",
         "gs://fokkos-bucket/currency/{{ ds }}-*.json",
         "gs://fokkos-bucket/average_prices/transfer_date={{ ds }}/"
     ],
