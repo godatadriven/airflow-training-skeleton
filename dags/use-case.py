@@ -1,19 +1,15 @@
-import datetime
 import airflow
-
 from airflow import DAG
-from airflow.utils.trigger_rule import TriggerRule
-
 from airflow.contrib.operators.dataflow_operator import DataFlowPythonOperator
 from airflow.contrib.operators.dataproc_operator import (
     DataprocClusterCreateOperator,
     DataprocClusterDeleteOperator,
     DataProcPySparkOperator,
 )
+from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
+from airflow.utils.trigger_rule import TriggerRule
 
-from godatadriven.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
-from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
-
+from airflow_training.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
 from http_to_gcs_operator import HttpToGcsOperator
 
 PROJECT_ID = "gdd-airflow-training"

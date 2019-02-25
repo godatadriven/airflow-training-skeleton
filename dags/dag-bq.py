@@ -29,17 +29,6 @@ bq_fetch_data = BigQueryGetDataOperator(
     dag=dag
 )
 
-
-def send_to_slack_func(**context):
-from airflow.operators.slack_operator import SlackAPIPostOperator
-operator = SlackAPIPostOperator(
-    task_id='failure',
-    text='test',
-    token='xoxp-559854890739-559228586160-560304790661-ae28d681f2f1026dd05cfc0a42f27d89',
-    channel='general'
-).execute()
-
-
 send_to_slack = PythonOperator(
     task_id='send_to_slack',
     python_callable=send_to_slack_func,
