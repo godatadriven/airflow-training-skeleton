@@ -88,7 +88,7 @@ compute_aggregates >> GoogleCloudStorageToBigQueryOperator(
     task_id="write_to_bq",
     bucket=BUCKET,
     source_objects=["average_prices/transfer_date={{ ds }}/*.parquet"],
-    destination_project_dataset_table=PROJECT_ID + ":fokko.land_registry_price${{ ds_nodash }}",
+    destination_project_dataset_table=PROJECT_ID + ":fokko.land_registry_price",
     source_format="PARQUET",
     write_disposition="WRITE_TRUNCATE",
     dag=dag,
