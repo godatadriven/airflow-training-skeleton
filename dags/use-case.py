@@ -49,7 +49,7 @@ pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
     postgres_conn_id="airflow-training-postgres",
 )
 
-pgsl_to_gcs  >> dataproc_create_cluster
+pgsl_to_gcs >> dataproc_create_cluster
 
 for currency in {"EUR", "USD"}:
     HttpToGcsOperator(
@@ -89,7 +89,7 @@ compute_aggregates >> GoogleCloudStorageToBigQueryOperator(
     task_id="write_to_bq",
     bucket=BUCKET,
     source_objects=["average_prices/transfer_date={{ ds }}/*.parquet"],
-    destination_project_dataset_table="gdd-airflow-training:prices.land_registry_price${{ ds_nodash }}",
+    destination_project_dataset_table=PROJECT_ID + ":prices.land_registry_price${{ ds_nodash }}",
     source_format="PARQUET",
     write_disposition="WRITE_TRUNCATE",
     dag=dag,

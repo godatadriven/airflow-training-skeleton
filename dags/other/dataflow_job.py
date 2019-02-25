@@ -29,6 +29,11 @@ def run(argv=None):
         dest="dataset",
         help="Destination BigQuery dataset",
     )
+    parser.add_argument(
+        "--project",
+        dest="project",
+        help="project_id",
+    )
     known_args, pipeline_args = parser.parse_known_args(argv)
     pipeline_options = PipelineOptions(pipeline_args)
     pipeline_options.view_as(SetupOptions).save_main_session = True
@@ -37,9 +42,9 @@ def run(argv=None):
                 p
                 | "ReadFromGCS" >> ReadFromText(known_args.input, coder=JsonCoder())
                 | WriteToBigQuery(
-            "result_table",
-            dataset="result_dataset",
-            project="gdd-airflow-training",
+            known_args.table,
+            dataset=known_args.dataset,
+            project=known_args.project,
             schema="city:string, "
                    "county:string, "
                    "district:string, "
