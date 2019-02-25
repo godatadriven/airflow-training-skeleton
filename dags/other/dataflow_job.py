@@ -12,14 +12,25 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 
 
-def run(argv):
+def run(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--input",
         dest="input",
+        default="gs://airflow-training-data/land_registry_price_paid_uk/*/*.json",
         help="Input file to process.",
     )
     known_args, pipeline_args = parser.parse_known_args(argv)
+    pipeline_args.extend(
+        [
+            "--runner=DataflowRunner",
+            "--project=gdd-airflow-training",
+            "--staging_location=gs://airflow-training-data/dataflow-staging",
+            "--temp_location=gs://airflow-training-data/dataflow-temp",
+            "--job_name=gcs-gzcomp-to-bq1",
+        ]
+    )
+
     pipeline_options = PipelineOptions(pipeline_args)
     pipeline_options.view_as(SetupOptions).save_main_session = True
     with beam.Pipeline(options=pipeline_options) as p:
@@ -27,9 +38,9 @@ def run(argv):
                 p
                 | "ReadFromGCS" >> ReadFromText(known_args.input, coder=JsonCoder())
                 | WriteToBigQuery(
-            bigquery_table,
-            dataset=bigquery_dataset,
-            project=project,
+            "result_table",
+            dataset="result_dataset",
+            project="gdd-airflow-training",
             schema="city:string, "
                    "county:string, "
                    "district:string, "
@@ -53,4 +64,5 @@ def run(argv):
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.INFO)
-    run(sys.argv)
+    print(sys.argv)
+    run(argv=sys.argv)

@@ -47,7 +47,9 @@ pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
     bucket=BUCKET,
     filename="land_registry_price_paid_uk/{{ ds }}/properties_{}.json",
     postgres_conn_id="airflow-training-postgres",
-) >> dataproc_create_cluster
+)
+
+pgsl_to_gcs  >> dataproc_create_cluster
 
 for currency in {"EUR", "USD"}:
     HttpToGcsOperator(
@@ -93,7 +95,7 @@ compute_aggregates >> GoogleCloudStorageToBigQueryOperator(
     dag=dag,
 )
 
-load_into_bigquery = DataFlowPythonOperator(
+land_registry_prices_to_bigquery = DataFlowPythonOperator(
     task_id="land_registry_prices_to_bigquery",
     dataflow_default_options={
         "project": PROJECT_ID,
@@ -108,4 +110,4 @@ load_into_bigquery = DataFlowPythonOperator(
     dag=dag,
 )
 
-pgsl_to_gcs >> load_into_bigquery
+pgsl_to_gcs >> land_registry_prices_to_bigquery
