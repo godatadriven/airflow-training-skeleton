@@ -4,11 +4,11 @@ from airflow import DAG
 from airflow.utils.dates import days_ago
 
 dag = DAG(
-    dag_id='godatafest',
+    dag_id='bigquery-to-slack',
     schedule_interval='@daily',
     default_args={
         'owner': 'GoDataDriven',
-        'start_date': airflow.utils.dates.days_ago(2)
+        'start_date': airflow.utils.dates.days_ago(12)
     }
 )
 
