@@ -1,6 +1,7 @@
 import airflow
 
 from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 
 dag = DAG(
@@ -22,20 +23,22 @@ bq_fetch_data = BigQueryGetDataOperator(
     WHERE DATE(committer.date) = '{{ ds }}'
     AND repo_name LIKE '%airflow%'
     GROUP BY committer.name
+    ORDER BY cnt DESC
     LIMIT 5;
 """,
     dag=dag
 )
 
-# def send_to_slack_func(**context):
-#     ...
-#
-#
-# send_to_slack = PythonOperator(
-#     task_id='send_to_slack',
-#     python_callable=send_to_slack_func,
-#     provide_context=True,
-#     dag=dag,
-# )
-#
-# bq_fetch_data >> send_to_slack
+
+def send_to_slack_func(**context):
+    print(context)
+
+
+send_to_slack = PythonOperator(
+    task_id='send_to_slack',
+    python_callable=send_to_slack_func,
+    provide_context=True,
+    dag=dag,
+)
+
+bq_fetch_data >> send_to_slack
