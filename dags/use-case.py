@@ -102,7 +102,7 @@ land_registry_prices_to_bigquery = DataFlowPythonOperator(
         "region": "europe-west1",
         "staging_location": "gs://{}/dataflow-staging".format(BUCKET),
         "temp_location": "gs://{}/dataflow-staging".format(BUCKET),
-        "input": "",
+        "input": "gs://fokkos-bucket/land_registry_price_paid_uk/{{ ds }}/*.json",
         "runner": "DataflowRunner",
         "job_name": "import-raw-data-{{ ds }}"
     },
