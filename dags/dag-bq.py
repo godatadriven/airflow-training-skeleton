@@ -1,3 +1,5 @@
+import airflow
+
 from airflow import DAG
 from datetime import datetime
 
@@ -9,22 +11,22 @@ dag = DAG(
         'start_date': airflow.utils.dates.days.ago(2)
     }
 )
-#
-# from bigquery_get_data import BigQueryGetDataOperator
-#
-#
-# bq_fetch_data = BigQueryGetDataOperator(
-#     task_id='bq_fetch_data',
-#     sql="""
-#     SELECT committer.name, count(1) as cnt
-#     FROM [bigquery-public-data.github_repos.commits]
-#     WHERE DATE(committer.date) = '{{ dt }}'
-#     AND repo_name LIKE '%airflow%'
-#     GROUP BY committer.name
-#     LIMIT 5;
-# """,
-#     dag=dag
-# )
+
+from bigquery_get_data import BigQueryGetDataOperator
+
+
+bq_fetch_data = BigQueryGetDataOperator(
+    task_id='bq_fetch_data',
+    sql="""
+    SELECT committer.name, count(1) as cnt
+    FROM [bigquery-public-data.github_repos.commits]
+    WHERE DATE(committer.date) = '{{ dt }}'
+    AND repo_name LIKE '%airflow%'
+    GROUP BY committer.name
+    LIMIT 5;
+""",
+    dag=dag
+)
 
 from airflow.operators.python_operator import PythonOperator
 from airflow.models import Variable
