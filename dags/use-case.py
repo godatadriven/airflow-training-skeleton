@@ -98,7 +98,7 @@ compute_aggregates >> GoogleCloudStorageToBigQueryOperator(
 land_registry_prices_to_bigquery = DataFlowPythonOperator(
     task_id="land_registry_prices_to_bigquery",
     dataflow_default_options={
-        "project": PROJECT_ID,
+        "project_id": PROJECT_ID,
         "region": "europe-west1",
         "staging_location": "gs://{}/dataflow-staging".format(BUCKET),
         "temp_location": "gs://{}/dataflow-staging".format(BUCKET),

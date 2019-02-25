@@ -30,8 +30,8 @@ def run(argv=None):
         help="Destination BigQuery dataset",
     )
     parser.add_argument(
-        "--project",
-        dest="project",
+        "--project_id",
+        dest="project_id",
         help="project_id",
     )
     known_args, pipeline_args = parser.parse_known_args(argv)
@@ -44,7 +44,7 @@ def run(argv=None):
                 | WriteToBigQuery(
             known_args.table,
             dataset=known_args.dataset,
-            project=known_args.project,
+            project=known_args.project_id,
             schema="city:string, "
                    "county:string, "
                    "district:string, "
