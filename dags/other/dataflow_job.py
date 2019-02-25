@@ -29,11 +29,6 @@ def run(argv=None):
         dest="dataset",
         help="Destination BigQuery dataset",
     )
-    parser.add_argument(
-        "--project_id",
-        dest="project_id",
-        help="project_id",
-    )
     known_args, pipeline_args = parser.parse_known_args(argv)
     pipeline_options = PipelineOptions(pipeline_args)
     pipeline_options.view_as(SetupOptions).save_main_session = True
@@ -44,7 +39,6 @@ def run(argv=None):
                 | WriteToBigQuery(
             known_args.table,
             dataset=known_args.dataset,
-            project=known_args.project_id,
             schema="city:string, "
                    "county:string, "
                    "district:string, "

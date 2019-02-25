@@ -55,8 +55,7 @@ for currency in {"EUR", "USD"}:
     HttpToGcsOperator(
         task_id="get_currency_" + currency,
         method="GET",
-        endpoint="/airflow-training-transform-valutas?date={{ ds }}&from=GBP&to="
-                 + currency,
+        endpoint="/convert-currency?date={{ ds }}&from=GBP&to=" + currency,
         http_conn_id="airflow-training-currency-http",
         gcs_path="currency/{{ ds }}-" + currency + ".json",
         gcs_bucket=BUCKET,
@@ -98,7 +97,6 @@ compute_aggregates >> GoogleCloudStorageToBigQueryOperator(
 land_registry_prices_to_bigquery = DataFlowPythonOperator(
     task_id="land_registry_prices_to_bigquery",
     dataflow_default_options={
-        "project_id": PROJECT_ID,
         "project": PROJECT_ID,
         "region": "europe-west1",
         "staging_location": "gs://{}/dataflow-staging".format(BUCKET),
