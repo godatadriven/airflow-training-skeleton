@@ -65,8 +65,6 @@ aggregation = spark.sql(
         currencies
     ON
         currencies.date = land_registry_price_paid_uk.transfer_date
-    WHERE
-        transfer_date = '{}'
     GROUP BY
         currency,
         transfer_date,
