@@ -12,8 +12,8 @@ from airflow.utils.trigger_rule import TriggerRule
 from airflow_training.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
 from http_to_gcs_operator import HttpToGcsOperator
 
-PROJECT_ID = "gdd-airflow-training"
-BUCKET = "airflow-training-data"
+PROJECT_ID = "airflowbolcom-020ce46afe7b0fe0"
+BUCKET = "fokkos-bucket"
 
 args = {
     "owner": "airflow",
@@ -41,7 +41,7 @@ pgsl_to_gcs = (
             task_id="postgres_to_gcs",
             dag=dag,
             sql="SELECT * FROM land_registry_price_paid_uk WHERE transfer_date = '{{ ds }}'",
-            bucket="airflow-training-data",
+            bucket=BUCKET,
             filename="land_registry_price_paid_uk/{{ ds }}/properties_{}.json",
             postgres_conn_id="airflow-training-postgres",
         ) >> dataproc_create_cluster
@@ -55,13 +55,13 @@ for currency in {"EUR", "USD"}:
                  + currency,
         http_conn_id="airflow-training-currency-http",
         gcs_path="currency/{{ ds }}-" + currency + ".json",
-        gcs_bucket="fokkos-bucket",
+        gcs_bucket=BUCKET,
         dag=dag,
     ) >> dataproc_create_cluster
 
 compute_aggregates = DataProcPySparkOperator(
     task_id="compute_aggregates",
-    main="gs://airflow-training-data/build_statistics.py",
+    main="build_statistics.py",
     cluster_name="analyse-pricing-{{ ds }}",
     arguments=["{{ ds }}"],
     dag=dag,
