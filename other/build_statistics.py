@@ -3,6 +3,8 @@ import sys
 from pyspark.sql.functions import col
 from pyspark.sql import SparkSession
 
+print(sys.argv)
+
 input_properties = sys.argv[1]
 input_currencies = sys.argv[2]
 target_path = sys.argv[3]
@@ -63,8 +65,6 @@ aggregation = spark.sql(
         currencies
     ON
         currencies.date = land_registry_price_paid_uk.transfer_date
-    WHERE
-        transfer_date = '{}'
     GROUP BY
         currency,
         transfer_date,
@@ -80,6 +80,5 @@ aggregation = spark.sql(
 
 (
     aggregation.write.mode("overwrite")
-        .partitionBy("transfer_date")
         .parquet(target_path)
 )
