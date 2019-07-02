@@ -14,35 +14,62 @@
 #  KIND, either express or implied.  See the License for the    *
 #  specific language governing permissions and limitations      *
 #  under the License.                                           *
-
-# Note: The airflow image used in this example is obtained by
-# building the image from the local docker subdirectory.
-
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
+apiVersion: v1
+kind: Service
 metadata:
-  name: admin-rbac
-subjects:
-  - kind: ServiceAccount
-    # Reference to upper's `metadata.name`
-    name: default
-    # Reference to upper's `metadata.namespace`
-    namespace: default
-roleRef:
-  kind: ClusterRole
-  name: cluster-admin
-  apiGroup: rbac.authorization.k8s.io
+  name: postgres
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app: postgres
+  clusterIP: None
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: airflow
+  name: postgres-deployment
+  labels:
+    app: postgres
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
   template:
     metadata:
       labels:
-        name: airflow
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres
+        ports:
+        - name: postgres
+          containerPort: 5432
+        env:
+         - name: POSTGRES_USER
+           value: "airflow"
+         - name: POSTGRES_PASSWORD
+           value: "airflow"
+         - name: POSTGRES_DB
+           value: "airflow"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airflow-deployment
+  labels:
+    app: airflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airflow
+  template:
+    metadata:
+      labels:
+        app: airflow
     spec:
       containers:
       - name: webserver
@@ -52,16 +79,6 @@ spec:
         - name: webserver
           containerPort: 8080
         args: ["upgradedb_webserver"]
-        env:
-        - name: AIRFLOW_KUBE_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: SQL_ALCHEMY_CONN
-          valueFrom:
-            secretKeyRef:
-              name: airflow-secrets
-              key: sql_alchemy_conn
         volumeMounts:
         - name: airflow-configmap
           mountPath: /root/airflow/airflow.cfg
@@ -74,16 +91,6 @@ spec:
         image: godatadriven/airflow:python3
         imagePullPolicy: Always
         args: ["scheduler"]
-        env:
-        - name: AIRFLOW_KUBE_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: SQL_ALCHEMY_CONN
-          valueFrom:
-            secretKeyRef:
-              name: airflow-secrets
-              key: sql_alchemy_conn
         volumeMounts:
         - name: airflow-configmap
           mountPath: /root/airflow/airflow.cfg
@@ -96,13 +103,6 @@ spec:
       - name: airflow-dags
         persistentVolumeClaim:
           claimName: airflow-dags
-      - name: airflow-dags-fake
-        emptyDir: {}
-      - name: airflow-dags-git
-        emptyDir: {}
-      - name: test-volume
-        persistentVolumeClaim:
-          claimName: test-volume
       - name: airflow-logs
         persistentVolumeClaim:
           claimName: airflow-logs
@@ -120,7 +120,31 @@ spec:
     - port: 8080
       nodePort: 30809
   selector:
-    name: airflow
+    app: airflow
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: airflow-dags
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: airflow-logs
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 22Gi
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -136,7 +160,7 @@ data:
     parallelism = 32
     load_examples = False
     plugins_folder = /root/airflow/plugins
-    sql_alchemy_conn = $SQL_ALCHEMY_CONN
+    sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
 
     [scheduler]
     dag_dir_list_interval = 300
@@ -296,7 +320,7 @@ data:
     # Should be supplied in the format: key = value
 
     [kubernetes_secrets]
-    SQL_ALCHEMY_CONN = airflow-secrets=sql_alchemy_conn
+    SQL_ALCHEMY_CONN = postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
 
     [hive]
     # Default mapreduce queue for HiveOperator tasks
