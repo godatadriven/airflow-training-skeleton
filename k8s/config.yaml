@@ -15,138 +15,6 @@
 #  specific language governing permissions and limitations      *
 #  under the License.                                           *
 apiVersion: v1
-kind: Service
-metadata:
-  name: postgres
-spec:
-  ports:
-  - port: 5432
-  selector:
-    app: postgres
-  clusterIP: None
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: postgres-deployment
-  labels:
-    app: postgres
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: postgres
-  template:
-    metadata:
-      labels:
-        app: postgres
-    spec:
-      containers:
-      - name: postgres
-        image: postgres
-        ports:
-        - name: postgres
-          containerPort: 5432
-        env:
-         - name: POSTGRES_USER
-           value: "airflow"
-         - name: POSTGRES_PASSWORD
-           value: "airflow"
-         - name: POSTGRES_DB
-           value: "airflow"
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: airflow-deployment
-  labels:
-    app: airflow
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: airflow
-  template:
-    metadata:
-      labels:
-        app: airflow
-    spec:
-      containers:
-      - name: webserver
-        image: godatadriven/airflow:python3
-        imagePullPolicy: Always
-        ports:
-        - name: webserver
-          containerPort: 8080
-        args: ["upgradedb_webserver"]
-        volumeMounts:
-        - name: airflow-configmap
-          mountPath: /root/airflow/airflow.cfg
-          subPath: airflow.cfg
-        - name: airflow-dags
-          mountPath: /root/airflow/dags
-        - name: airflow-logs
-          mountPath: /root/airflow/logs
-      - name: scheduler
-        image: godatadriven/airflow:python3
-        imagePullPolicy: Always
-        args: ["scheduler"]
-        volumeMounts:
-        - name: airflow-configmap
-          mountPath: /root/airflow/airflow.cfg
-          subPath: airflow.cfg
-        - name: airflow-dags
-          mountPath: /root/airflow/dags
-        - name: airflow-logs
-          mountPath: /root/airflow/logs
-      volumes:
-      - name: airflow-dags
-        persistentVolumeClaim:
-          claimName: airflow-dags
-      - name: airflow-logs
-        persistentVolumeClaim:
-          claimName: airflow-logs
-      - name: airflow-configmap
-        configMap:
-          name: airflow-configmap
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: airflow
-spec:
-  type: NodePort
-  ports:
-    - port: 8080
-      nodePort: 30809
-  selector:
-    app: airflow
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: airflow-dags
-spec:
-  accessModes:
-    - ReadWriteOnce
-  volumeMode: Filesystem
-  resources:
-    requests:
-      storage: 2Gi
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: airflow-logs
-spec:
-  accessModes:
-    - ReadWriteOnce
-  volumeMode: Filesystem
-  resources:
-    requests:
-      storage: 22Gi
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
   name: airflow-configmap
@@ -286,12 +154,12 @@ data:
 
     [kubernetes]
     airflow_configmap = airflow-configmap
-    worker_container_repository = airflow
-    worker_container_tag = latest
-    worker_container_image_pull_policy = IfNotPresent
+    worker_container_repository = godatadriven/airflow
+    worker_container_tag = python3
+    worker_container_image_pull_policy = Always
     delete_worker_pods = True
     dags_in_image = False
-    dags_volume_claim = airflow-configmap
+    dags_volume_claim = airflow-dags
     dags_volume_subpath =
     logs_volume_claim = airflow-logs
     logs_volume_subpath =
@@ -320,7 +188,7 @@ data:
     # Should be supplied in the format: key = value
 
     [kubernetes_secrets]
-    SQL_ALCHEMY_CONN = postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    # SQL_ALCHEMY_CONN = airflow-secrets=sql_alchemy_conn
 
     [hive]
     # Default mapreduce queue for HiveOperator tasks
