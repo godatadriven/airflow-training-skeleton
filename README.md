@@ -1,20 +1,18 @@
-# Airflow training skeleton
+# Apache Airflow training
 
 This project serves as a skeleton project on which Airflow training participants build exercises. There are two versions, one cloud based training and one on-premise based training.
 
 ## On-Premise training
 
-The on premise based training will run Apache Airflow based on a Docker stack. This includes docker-compose to hook up multiple containers to simulate a multi container setup.
-
-https://xebia.com/blog/running-kubernetes-locally-docker-mac-os-x/
-
+The on premise based training will run Apache Airflow based on a Docker stack. This includes docker-compose to hook up multiple containers to simulate a multi container setup. A guide on how to setup k8s locally: https://xebia.com/blog/running-kubernetes-locally-docker-mac-os-x/
 
 ```sh
-git clone git@github.com:astronomer/helm.astronomer.io.git
-cd helm.astronomer.io
-helm install -n airflow-prod charts/airflow
+git clone git@github.com:godatadriven/airflow-training-skeleton.git
+cd airflow-training-skeleton/
+kubectl apply -f k8s/
 ```
 
+Hit up a browser and browse to http://localhost:30808/admin/ to see the admin screen.
 
 ## Cloud based training
 
