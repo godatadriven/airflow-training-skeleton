@@ -114,7 +114,7 @@ data:
     error_logfile = -
 
     # Expose the configuration file in the web server
-    expose_config = False
+    expose_config = True
 
     # Default DAG view.  Valid values are:
     # tree, graph, duration, gantt, landing_times
@@ -154,8 +154,8 @@ data:
 
     [kubernetes]
     airflow_configmap = airflow-configmap
-    worker_container_repository = godatadriven/airflow
-    worker_container_tag = python3
+    worker_container_repository = godatadriven/airspark
+    worker_container_tag = latest
     worker_container_image_pull_policy = Always
     delete_worker_pods = True
     dags_in_image = False
