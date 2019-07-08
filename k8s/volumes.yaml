@@ -62,27 +62,3 @@ spec:
   resources:
     requests:
       storage: 2Gi
----
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: shared
-spec:
-  storageClassName: hostpath
-  accessModes:
-    - ReadOnlyMany
-  capacity:
-    storage: 2Gi
-  hostPath:
-    path: "/Users/fokkodriesprong/Desktop/airflow-training-skeleton/shared/"
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: shared
-spec:
-  accessModes:
-    - ReadOnlyMany
-  resources:
-    requests:
-      storage: 2Gi

@@ -19,11 +19,12 @@ kind: Service
 metadata:
   name: postgres
 spec:
+  type: NodePort
   ports:
   - port: 5432
+    nodePort: 32345
   selector:
     app: postgres
-  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment
