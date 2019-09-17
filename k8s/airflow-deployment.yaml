@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: webserver
-        image: godatadriven/airspark
+        image: godatadriven/airflow
         imagePullPolicy: Always
         ports:
         - name: webserver
@@ -47,7 +47,7 @@ spec:
         - name: airflow-logs
           mountPath: /root/airflow/logs
       - name: scheduler
-        image: godatadriven/airspark
+        image: godatadriven/airflow
         imagePullPolicy: Always
         args: ["scheduler"]
         volumeMounts:

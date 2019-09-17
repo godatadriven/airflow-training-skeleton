@@ -28,17 +28,6 @@ spec:
   hostPath:
     path: "/Users/fokkodriesprong/Desktop/airflow-training-skeleton/dags/"
 ---
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: airflow-dags
-spec:
-  accessModes:
-    - ReadOnlyMany
-  resources:
-    requests:
-      storage: 2Gi
----
 kind: PersistentVolume
 apiVersion: v1
 metadata:
@@ -51,14 +40,3 @@ spec:
     storage: 2Gi
   hostPath:
     path: "/Users/fokkodriesprong/Desktop/airflow-training-skeleton/logs/"
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: airflow-logs
-spec:
-  accessModes:
-    - ReadOnlyMany
-  resources:
-    requests:
-      storage: 2Gi

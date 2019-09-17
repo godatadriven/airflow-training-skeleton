@@ -154,7 +154,7 @@ data:
 
     [kubernetes]
     airflow_configmap = airflow-configmap
-    worker_container_repository = godatadriven/airspark
+    worker_container_repository = godatadriven/airflow
     worker_container_tag = latest
     worker_container_image_pull_policy = Always
     delete_worker_pods = True
