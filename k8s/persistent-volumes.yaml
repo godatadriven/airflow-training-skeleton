@@ -23,9 +23,6 @@ spec:
   storageClassName: hostpath
   accessModes:
     - ReadOnlyMany
-  claimRef:
-    namespace: default
-    name: airflow-dags
   capacity:
     storage: 2Gi
   hostPath:
@@ -39,9 +36,6 @@ spec:
   storageClassName: hostpath
   accessModes:
     - ReadOnlyMany
-  claimRef:
-    namespace: default
-    name: airflow-logs
   capacity:
     storage: 2Gi
   hostPath:
