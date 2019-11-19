@@ -1,0 +1,18 @@
+steps:
+- id: 'lint'
+  name: 'python:3.6'
+  args: ['bash', '-c', 'pip install flake8 && flake8 || true']
+- id: 'update-python-dependencies'
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['-c', 'grep -v apache-airflow requirements.txt > gcp_requirements.txt && gcloud composer environments update training-airflow --update-pypi-packages-from-file gcp_requirements.txt --location europe-west1 --async || true']
+  entrypoint: 'bash'
+- id: 'sync-dags'
+  name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'sh'
+  args:
+    - '-c'
+    - |
+      composer_bucket=$(gcloud composer environments describe training-airflow --location europe-west1 --format='value(config.dagGcsPrefix)')
+      gsutil -m rsync -r dags $composer_bucket
+      bucket_root=$(echo $composer_bucket | sed 's/\/dags//g')
+      gsutil -m rsync -r other $bucket_root
