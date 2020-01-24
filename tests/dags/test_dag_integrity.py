@@ -11,8 +11,7 @@ from airflow import models as airflow_models
 from airflow.utils.dag_processing import list_py_file_paths
 
 DAG_BASE_DIR = path.join(path.dirname(__file__), "..", "..", "dags")
-DAG_PATHS = list_py_file_paths(DAG_BASE_DIR)
-
+DAG_PATHS = list_py_file_paths(DAG_BASE_DIR, safe_mode=True, include_examples=False)
 
 @pytest.mark.parametrize("dag_path", DAG_PATHS)
 def test_dag_integrity(dag_path):
