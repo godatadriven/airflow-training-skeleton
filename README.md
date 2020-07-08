@@ -2,19 +2,7 @@
 
 This project serves as a skeleton project on which Airflow training participants build exercises. There are two versions, one cloud based training and one on-premise based training.
 
-## On-Premise training
-
-The on premise based training will run Apache Airflow based on a Docker stack. This includes docker-compose to hook up multiple containers to simulate a multi container setup. A guide on how to setup k8s locally: https://xebia.com/blog/running-kubernetes-locally-docker-mac-os-x/
-
-```sh
-git clone git@github.com:godatadriven/airflow-training-skeleton.git
-cd airflow-training-skeleton/
-kubectl apply -f k8s/
-```
-
-Hit up a browser and browse to http://localhost:30808/admin/ to see the admin screen.
-
-## Cloud based training
+## Cloud Composer based training
 
 At the start of the training, you will receive a Google Cloud Platform project, with a pre-configured Cloud Composer environment (Google's managed Airflow).
 
@@ -32,3 +20,15 @@ A CI pipeline is included with the project (`cloudbuild.yml`), which defines ste
 8. Under `Build configuration`, select `cloudbuild.yaml` and click Create trigger at the bottom.
 
 Done. The just configured build trigger now watches changes on your repository.
+
+## On-Premise training
+
+The on premise based training will run Apache Airflow based on a Docker stack. This includes docker-compose to hook up multiple containers to simulate a multi container setup. A guide on how to setup k8s locally: https://xebia.com/blog/running-kubernetes-locally-docker-mac-os-x/
+
+```sh
+git clone git@github.com:godatadriven/airflow-training-skeleton.git
+cd airflow-training-skeleton/
+kubectl apply -f k8s/
+```
+
+Hit up a browser and browse to http://localhost:30808/admin/ to see the admin screen.
