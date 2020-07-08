@@ -1,2 +1,1 @@
-slackclient
 apache-airflow[gcp_api,postgres]==1.10.5
