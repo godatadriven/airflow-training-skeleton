@@ -24,12 +24,10 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: airflow
       author: roman
   template:
     metadata:
       labels:
-        author: roman
         app: airflow
     spec:
       containers:
