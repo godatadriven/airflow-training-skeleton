@@ -29,6 +29,7 @@ spec:
   template:
     metadata:
       labels:
+        author: roman
         app: airflow
     spec:
       containers:
