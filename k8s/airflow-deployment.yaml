@@ -24,7 +24,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      author: roman
+      app: airflow
   template:
     metadata:
       labels:
